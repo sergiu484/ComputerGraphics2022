@@ -1,0 +1,68 @@
+void keyPressed() {
+  if (key=='s') save("result.png");
+  
+  if (key=='1') {
+    // Reset to the input image and don't do any stippling 
+    outputImage = inputImage;
+    doPlacementStippling = false;
+  }
+  if (key=='2') {
+    // Clear the image and start stippling. The flag doPlacementStippling is checked in the 
+    // main draw loop and enables or disables the random placement of points.
+     background(255);
+     doPlacementStippling = true;
+  }
+  if (key=='3') {
+    // Slow stippling: Disable placement stippling, create the points for the image and then
+    // draw them to an image. By updating output image, it will be shown in the draw loop.
+    doPlacementStippling = false;
+    ArrayList pointList = createPointsPoissonDisc(false);
+    outputImage = createOutputImage(pointList);
+  }
+  if (key=='4') {
+    // Now we do fast stippling with the offscreen buffer. First, we disable placement stippling and then creare
+    // a clear offscreen buffer as a PGraphics object. Then by calling createPointsPoissonDisc(true) we do the
+    // quick stippling.
+    doPlacementStippling = false;
+    offscreenBuffer = createGraphics(inputImage.width, inputImage.height);
+    offscreenBuffer.beginDraw();
+    offscreenBuffer.stroke(color(0));
+    offscreenBuffer.background(255);
+    offscreenBuffer.fill(0);
+    
+    ArrayList pointList = createPointsPoissonDisc(true);
+    outputImage = createOutputImage(pointList);
+  }
+  if (key=='5') {
+    // For debug puposes we can show the offscreen buffer as well
+    if (offscreenBuffer != null) {
+      offscreenBuffer.endDraw();
+      outputImage = offscreenBuffer;
+    }
+  }
+
+  if (key == 'u') {
+    // Enable/disable uniform disc radii
+    uniformDiscRadii = !uniformDiscRadii;
+  }
+
+  if (key=='+') {
+    // Increase the maximum number of points we create
+    maxPoints *= 1.3;
+    ArrayList pointList = createPointsPoissonDisc(false);
+    outputImage = createOutputImage(pointList);
+  } 
+  if (key=='-') {
+    // decrease the maximum number of points we create
+    maxPoints /= 1.3;
+    ArrayList pointList = createPointsPoissonDisc(false);
+    outputImage = createOutputImage(pointList);
+  } 
+  
+  if (key == 'p') {
+    // Enable or disable the printing of the current point count. Since this can slow down
+    // your program a lot, this should not be on all the time.
+    printPointCount = !printPointCount;
+    println("Print point count: ", printPointCount);
+  }
+}

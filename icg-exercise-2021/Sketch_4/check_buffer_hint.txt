@@ -1,0 +1,17 @@
+boolean checkBuffer(float x, float y) {
+  // TODO: Check the offscreen buffer for the presence of a nearby point.
+  // if it is not white, something is here. Return false if the location
+  // is occupied and true otherwise. To access the offscreen buffer at a
+  // certain location do NOT use offscreenBuffer.pixels, as this would
+  // require a call to loadPixels() which slows this approach down significantly.
+  // Instead, use offscreenBuffer.get(a, b); for quick access.
+  // Furthermore, .get() returns color, which is an int, containing the RGBA in
+  // its bytes. Do not use brightness() here, but directly compare to color(255);
+  
+  int bufferColor = offscreenBuffer.get(round(x), round(y));
+  if (bufferColor != color(255)) {
+    return false;
+  } else {
+    return true;
+  }
+}
