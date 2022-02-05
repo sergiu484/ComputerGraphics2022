@@ -1,0 +1,86 @@
+Ilustrative Computer Graphics:
+
+**********************************
+Sketch 10 is completed.
+- Sketch 4 - insertPointPoissonDisc_Fast
+Idea:
+	The idea of this part is in the slide 41 of NPR03_stippling I. When you want to add a new stippling in a position (x,y) , check if it is too close another point. If it is too close, we don't accept this stipple and try another one. Otherwise, we can add the stipple. This checking can be done by drawing a color-filled circle with 2 times radius on a color background (white in our sketch). So if (x,y) is filled by other color instead of white, it means that there exist a stipple that is close to that position.
+Implementation:
+	This part is easy, what you need to do is to add 6 line of code under TODO:
+	1. check the a point is near another point in buffer (There is a function for it)
+	2-4. If you can place a point, then draw a filled point of random color at the current location on the canvas. You need to set the Slide 51 of NPR03_stippling I as the example of how to draw a circle on the buffer.
+	5. add the point to the pointlList
+	6. make accepted as true.
+	
+**********************************
+
+Sketch 7:
+	Since you have nothing in your code, I cannot give you too many details. As you need to try to do it yourself first.
+For getOffsetNormal() in Stroke file:
+
+Given a set of point
+
+o o o o o o o o o 
+
+- What you need to do it to first calculate the normal n of each point p ( by subtracting the two near vertex, and then rotate the vector with 90 degree).
+
+o-o-o-o-o-o-o-o-o
+
+| | | | | | | | |
+
+o o o o o o o o o
+
+- you need to normalize the final vector.
+
+For draw() in Stroke file:
+- For each point, draw two vertex ( p - n * w, p + n * w );
+x x x x x x x x x
+
+| | | | | | | | |
+
+o o o o o o o o o
+
+| | | | | | | | |
+
+x x x x x x x x x
+- The texture coordinate of these two vertex are (w, v) and (0, v), where v is ratio of the len
+(w,0)  (w,h/2)        (w,h)
+
+x x x x x x x x x
+
+| | | | | | | | |
+
+o o o o o o o o o
+
+| | | | | | | | |
+
+x x x x x x x x x
+
+(0,0)   (0,h/2)  (0,h)
+
+Information are in the slide 12-14, 21 of NPR06.
+
+- Sketch 8:
+
+	Line 84: There is some problem in the instruction. Actually, you need to see if thresholdBrightness is postive (turn it to blue) or negative (turn it to orange). Be careful that one is add to red and green, one is subtract from green and blue.
+
+	Line 109: As mentioned in TODO "Do not do a channel-wise difference bust subtract brightnesses," You need to subtract the brightness of depthImage and brightness of depth. Be careful of the order, and no ABS is needed.
+
+	Line 131: You use the function wrongly, you do not need a self-define threshold, as the threshold is some varibles (may be you can read and understand the lecture slide NPR07_25D Slide 40-41 again and know which varible should it be). You don't need the subtraction too.
+
+Sketch 9:
+
+	Since you have nothing in your code, I cannot give you too many details. As you need to try to do it yourself first. Here are some hints:
+	quantizeColor: It is similar to thresholding in week 1.
+	toonShade: The TODO is quite clear to understand.
+	You first quantize the image into several discrete color, and then blend the quantized image with the background.
+	What you need to do next is to use canny edge detector. (There is a funtion for you).
+	Then you detect the edge of the depth directly.
+	You also seperate the normal map into 3 channels and then detect the edges.
+	Blend the two edges and the images together.
+	You can read the lecture slide and wiki for some information https://en.wikipedia.org/wiki/Cel_shading
+**********************************
+- Sketch 11:
+	You did it quite well. The only problem is the processing API structure.
+	Line 62: you should not convert the value to (int), but use color() to convert a single float value to RGB color. Be careful of the bracket position.
+	Line 115: you should not set it to 0 as the transparent is also zero. so nothing will be visible. you need to use color(r,g,b,a) to generate a black color with 255 transparent.
